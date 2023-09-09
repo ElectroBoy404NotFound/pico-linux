@@ -130,6 +130,15 @@ int initPSRAM()
 #if PSRAM_TWO_CHIPS
     psramReset(PSRAM_SPI_PIN_S2);
 #endif
+#if PSRAM_THREE_CHIPS
+    psramReset(PSRAM_SPI_PIN_S2);
+    psramReset(PSRAM_SPI_PIN_S3);
+#endif
+#if PSRAM_FOUR_CHIPS
+    psramReset(PSRAM_SPI_PIN_S2);
+    psramReset(PSRAM_SPI_PIN_S3);
+    psramReset(PSRAM_SPI_PIN_S4);
+#endif
 
     uint8_t chipId[6];
 
@@ -141,6 +150,28 @@ int initPSRAM()
     psramReadID(PSRAM_SPI_PIN_S2, chipId);
     if (chipId[1] != PSRAM_KGD)
         return -2;
+#endif
+#if PSRAM_THREE_CHIPS
+    psramReadID(PSRAM_SPI_PIN_S2, chipId);
+    if (chipId[1] != PSRAM_KGD)
+        return -2;
+
+    psramReadID(PSRAM_SPI_PIN_S3, chipId);
+    if (chipId[1] != PSRAM_KGD)
+        return -3;
+#endif
+#if PSRAM_FOUR_CHIPS
+    psramReadID(PSRAM_SPI_PIN_S2, chipId);
+    if (chipId[1] != PSRAM_KGD)
+        return -2;
+
+    psramReadID(PSRAM_SPI_PIN_S3, chipId);
+    if (chipId[1] != PSRAM_KGD)
+        return -3;
+    
+    psramReadID(PSRAM_SPI_PIN_S4, chipId);
+    if (chipId[1] != PSRAM_KGD)
+        return -4;
 #endif
 
     reads = writes = 0;
@@ -173,6 +204,29 @@ void accessPSRAM(uint32_t addr, size_t size, bool write, void *bufP)
     {
         ramchip = PSRAM_SPI_PIN_S2;
         addr -= PSRAM_CHIP_SIZE;
+    }
+#endif
+#if PSRAM_THREE_CHIPS
+    if (addr >= PSRAM_CHIP_SIZE && addr - PSRAM_CHIP_SIZE < PSRAM_CHIP_SIZE)
+    {
+        ramchip = PSRAM_SPI_PIN_S2;
+        addr -= PSRAM_CHIP_SIZE;
+    } else {
+        ramchip = PSRAM_SPI_PIN_S3;
+        addr -= PSRAM_CHIP_SIZE * 2;
+    }
+#endif
+#if PSRAM_FOUR_CHIPS
+    if (addr >= PSRAM_CHIP_SIZE && addr - PSRAM_CHIP_SIZE < PSRAM_CHIP_SIZE)
+    {
+        ramchip = PSRAM_SPI_PIN_S2;
+        addr -= PSRAM_CHIP_SIZE;
+    } else if (addr >= (PSRAM_CHIP_SIZE * 2) && addr - (PSRAM_CHIP_SIZE*2) < PSRAM_CHIP_SIZE) {
+        ramchip = PSRAM_SPI_PIN_S3;
+        addr -= PSRAM_CHIP_SIZE * 2;
+    } else {
+        ramchip = PSRAM_SPI_PIN_S4;
+        addr -= PSRAM_CHIP_SIZE * 3;
     }
 #endif
 

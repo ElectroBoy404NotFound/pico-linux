@@ -12,7 +12,7 @@
 #define IMAGE_FILENAME "0:Image"
 
 // Time divisor
-#define EMULATOR_TIME_DIV 3
+#define EMULATOR_TIME_DIV 2
 
 // Tie microsecond clock to instruction count
 #define EMULATOR_FIXED_UPDATE false
@@ -65,12 +65,18 @@
 // Select lines for the two PSRAM chips
 #define PSRAM_SPI_PIN_S1 21
 #define PSRAM_SPI_PIN_S2 22
+#define PSRAM_SPI_PIN_S3 26
+#define PSRAM_SPI_PIN_S4 27
 
 // PSRAM chip size (in kilobytes)
 #define PSRAM_CHIP_SIZE (8192 * 1024)
 
 // Use two PSRAM chips?
-#define PSRAM_TWO_CHIPS 1
+#define PSRAM_TWO_CHIPS   1
+// Use three PSRAM chips?
+#define PSRAM_THREE_CHIPS 0
+// Use four PSRAM chips?
+#define PSRAM_FOUR_CHIPS  0
 
 // PSRAM SPI speed (in MHz)
 #define PSRAM_SPI_SPEED 40
@@ -139,7 +145,29 @@
 
 #endif
 
+#if PSRAM_FOUR_CHIPS
+    #undef PSRAM_THREE_CHIPS
+    #undef PSRAM_TWO_CHIPS
+
+    #define PSRAM_THREE_CHIPS 0
+    #define PSRAM_TWO_CHIPS 0
+#else PSRAM_THREE_CHIPS
+    #if PSRAM_THREE_CHIPS
+        #undef PSRAM_FOUR_CHIPS
+        #undef PSRAM_TWO_CHIPS
+
+        #define PSRAM_FOUR_CHIPS 0
+        #define PSRAM_TWO_CHIPS 0
+    #endif
+#endif
+
 #if PSRAM_TWO_CHIPS && PSRAM_CHIP_SIZE * 2 < EMULATOR_RAM_MB
+    #error "RAM Size too Big!"
+#endif
+#if PSRAM_THREE_CHIPS && PSRAM_CHIP_SIZE * 3 < EMULATOR_RAM_MB
+    #error "RAM Size too Big!"
+#endif
+#if PSRAM_FOUR_CHIPS && PSRAM_CHIP_SIZE * 4 < EMULATOR_RAM_MB
     #error "RAM Size too Big!"
 #endif
 
