@@ -12,7 +12,7 @@
 #define IMAGE_FILENAME "0:Image"
 
 // Time divisor
-#define EMULATOR_TIME_DIV 2
+#define EMULATOR_TIME_DIV 1
 
 // Tie microsecond clock to instruction count
 #define EMULATOR_FIXED_UPDATE false
