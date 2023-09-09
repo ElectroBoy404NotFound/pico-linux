@@ -7,7 +7,7 @@
 
 RISC-V emulator for RP2040, capable of running Linux.\
 
-Based on [pico-rv32ima by tvlad1234](https://github.com/tvlad1234/pico-rv32ima).\
+Based on [pico-rv32ima by tvlad1234](https://github.com/tvlad1234/pico-rv32ima).
 Based on [mini-rv32ima by CNLohr](https://github.com/cnlohr/mini-rv32ima).
 
 ## How It Works
