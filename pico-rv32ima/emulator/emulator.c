@@ -122,12 +122,12 @@ static void DumpState(struct MiniRV32IMAState *core)
 	console_printf("Cache: hit: %llu, accessed: %llu\n\r", thit, taccessed);
     console_printf("RAM: read: %llu, write: %llu\n\r", reads, writes);
 	console_printf("PC: %08x\r\n", pc);
-	console_printf("Z:%08x ra:%08x sp:%08x gp:%08x tp:%08x t0:%08x t1:%08x t2:%08x s0:%08x s1:%08x a0:%08x a1:%08x a2:%08x a3:%08x a4:%08x a5:%08x\n\r",
-		regs[0], regs[1], regs[2], regs[3], regs[4], regs[5], regs[6], regs[7],
-		regs[8], regs[9], regs[10], regs[11], regs[12], regs[13], regs[14], regs[15] );
-	console_printf("a6:%08x a7:%08x s2:%08x s3:%08x s4:%08x s5:%08x s6:%08x s7:%08x s8:%08x s9:%08x s10:%08x s11:%08x t3:%08x t4:%08x t5:%08x t6:%08x\n\r",
-		regs[16], regs[17], regs[18], regs[19], regs[20], regs[21], regs[22], regs[23],
-		regs[24], regs[25], regs[26], regs[27], regs[28], regs[29], regs[30], regs[31] );
+	// console_printf("Z:%08x ra:%08x sp:%08x gp:%08x tp:%08x t0:%08x t1:%08x t2:%08x s0:%08x s1:%08x a0:%08x a1:%08x a2:%08x a3:%08x a4:%08x a5:%08x\n\r",
+	// 	regs[0], regs[1], regs[2], regs[3], regs[4], regs[5], regs[6], regs[7],
+	// 	regs[8], regs[9], regs[10], regs[11], regs[12], regs[13], regs[14], regs[15] );
+	// console_printf("a6:%08x a7:%08x s2:%08x s3:%08x s4:%08x s5:%08x s6:%08x s7:%08x s8:%08x s9:%08x s10:%08x s11:%08x t3:%08x t4:%08x t5:%08x t6:%08x\n\r",
+	// 	regs[16], regs[17], regs[18], regs[19], regs[20], regs[21], regs[22], regs[23],
+	// 	regs[24], regs[25], regs[26], regs[27], regs[28], regs[29], regs[30], regs[31] );
 }
 struct MiniRV32IMAState core;
 
@@ -155,7 +155,7 @@ int rvEmulator()
     core.pc = MINIRV32_RAM_IMAGE_OFFSET;
     long long instct = -1;
 
-    resetStatsRAM();
+    // resetStatsRAM();
 
     uint64_t rt;
     uint64_t lastTime = (fixed_update) ? 0 : (GetTimeMicroseconds() / time_divisor);
