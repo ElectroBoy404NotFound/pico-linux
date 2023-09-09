@@ -1,4 +1,4 @@
-#include "rv32_config.h"
+#include "../config/rv32_config.h"
 #if CONSOLE_LCD
 
 #include "pico/stdlib.h"

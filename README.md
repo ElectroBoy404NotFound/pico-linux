@@ -1,5 +1,7 @@
-# pico-rv32ima
+# pico-linux
 RISC-V emulator for RP2040, capable of running Linux.\
+
+Based on [pico-rv32ima by tvlad1234](https://github.com/tvlad1234/pico-rv32ima).
 Based on [mini-rv32ima by CNLohr](https://github.com/cnlohr/mini-rv32ima).
 
 ## How it works
@@ -8,13 +10,13 @@ This project uses [CNLohr's mini-rv32ima](https://github.com/cnlohr/mini-rv32ima
 ## Requirements 
 - a Raspberry Pi Pico (or other RP2040 board)
 - an SD card
-- two 8 megabyte (64Mbit) SPI PSRAM chips (I used LY68L6400).
+- two 8 megabyte (64Mbit) SPI PSRAM chips (tvlad1234 used LY68L6400, I used PSRAM64H).
     - it is possible to use only one of these chips when running a reduced system image, by changing a setting in the config file.
 
 _This project overvolts and overclocks the RP2040! Use at own risk!_
 
 ## How to use
-The configuration can be modified in the [rv32_config.h](pico-rv32ima/rv32_config.h) file. A schematic with the pin mappings described here is included in [this file](hardware/pico_linux.kicad_sch).
+The configuration can be modified in the [rv32_config.h](pico-rv32ima/config/rv32_config.h) file.
 
 - By default, the SD card is connected via SPI, with the following pinout:
     - CLK: GPIO18
@@ -30,10 +32,9 @@ The configuration can be modified in the [rv32_config.h](pico-rv32ima/rv32_confi
     - CS1: GPIO21
     - CS2: GPIO22
 
-- The RAM chips use hardware SPI by default. A flag in the config file allows them to use software bit-banged SPI (required for using the LCD console).
+- The RAM chips use hardware SPI by default. A flag in the config file allows them to use software bit-banged SPI.
 
-- The system console is accessible over USB-CDC, UART or an 128x160 ST7735 display paired with a PS2 keyboard. All three can be used at the same time, but keep in mind they point to the same virtual console. They can be enabled or disabled as desired in the config file. By default, only the USB console is enabled.
-    - The use of the LCD console requires disabling the hardware SPI interface for the RAN in the config file.
+- The system console is accessible over USB-CDC, UART or an 128x160 ST7735 display paired with a PS2 keyboard. All three can be used at the same time, but keep in mind they point to the same virtual console. They can be enabled or disabled as desired in the config file. By default, the UART console and LCD console is enabled.
 
 The SD card needs to be formatted as FAT32 or exFAT. Block sizes from 1024 to 4096 bytes are confirmed to be working. A prebuilt Linux kernel and filesystem image is provided in [this file](linux/Image). It must be placed in the root of the SD card. If you want to build the image yourself, you need to run `make` in the [linux](linux) folder. This will clone the buildroot source tree, apply the necessary config files and build the kernel and system image.
 
@@ -45,3 +46,9 @@ On powerup, the Linux image will be copied into RAM. After a few seconds, Linux 
     - ![Console boot log](pictures/screenshot.jpg)
 - LCD console:
     - ![LCD console](pictures/lcd.jpg)
+
+## Credits
+- [tvlad1234 for pico-rv32ima](https://github.com/tvlad1234/pico-rv32ima)
+- [CNLohr for mini-rv32ima](https://github.com/cnlohr/mini-rv32ima)
+- [xhackerustc for his uc32-rvima project (The same cache implmentation is used in this project)](https://github.com/xhackerustc/uc-rv32ima/)
+- And anyone else involved. Please send a pull if I forgot your name!

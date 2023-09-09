@@ -1,12 +1,16 @@
 add_executable(pico-rv32ima
     main.c
-	sd_hw_config.c
-	psram.c
-	cache.c
-	emulator.c
-	usb_descriptors.c
-    console.c
-	terminal.c
+	
+	psram/psram.c
+	cache/cache.c
+
+	emulator/emulator.c
+	
+	console/usb_descriptors.c
+    console/console.c
+	console/terminal.c
+	
+	config/sd_hw_config.c
 )
 
 # Add the standard library and FatFS/SPI to the build
@@ -25,7 +29,7 @@ target_link_libraries(pico-rv32ima
 	ps2
 )
 
-target_include_directories(pico-rv32ima PUBLIC ${CMAKE_CURRENT_LIST_DIR}/tusb_inc )
+target_include_directories(pico-rv32ima PUBLIC ${CMAKE_CURRENT_LIST_DIR}/console/tusb_inc )
 
 # pico_define_boot_stage2(slower_boot2 ${PICO_DEFAULT_BOOT_STAGE2_FILE})
 # target_compile_definitions(slower_boot2 PRIVATE PICO_FLASH_SPI_CLKDIV=4)

@@ -7,7 +7,7 @@
 #include "console.h"
 #include "terminal.h"
 
-#include "rv32_config.h"
+#include "../config/rv32_config.h"
 
 #if CONSOLE_CDC
 #include "tusb.h"

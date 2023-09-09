@@ -9,10 +9,10 @@
 #include "ff.h"
 #include "hw_config.h"
 
-#include "psram.h"
-#include "emulator.h"
-#include "console.h"
-#include "terminal.h"
+#include "psram/psram.h"
+#include "emulator/emulator.h"
+#include "console/console.h"
+#include "console/terminal.h"
 
 void core1_entry();
 

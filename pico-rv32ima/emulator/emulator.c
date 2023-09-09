@@ -4,19 +4,19 @@
 #include "pico/stdlib.h"
 #include "pico/util/queue.h"
 
-#include "console.h"
-#include "terminal.h"
+#include "../console/console.h"
+#include "../console/terminal.h"
 
-#include "psram.h"
-#include "cache.h"
-#include "emulator.h"
+#include "../psram/psram.h"
+#include "../cache/cache.h"
+#include "../emulator/emulator.h"
 
 #include "f_util.h"
 #include "ff.h"
 
 #include "default64mbdtc.h"
 
-#include "rv32_config.h"
+#include "../config/rv32_config.h"
 
 int time_divisor = EMULATOR_TIME_DIV;
 int fixed_update = EMULATOR_FIXED_UPDATE;

@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-#include "rv32_config.h"
+#include "../config/rv32_config.h"
 #include "psram.h"
 
 uint64_t reads, writes;

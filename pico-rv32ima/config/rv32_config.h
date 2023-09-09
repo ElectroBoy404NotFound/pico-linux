@@ -139,4 +139,8 @@
 
 #endif
 
+#if PSRAM_TWO_CHIPS && PSRAM_CHIP_SIZE * 2 < EMULATOR_RAM_MB
+    #error "RAM Size too Big!"
+#endif
+
 #endif

@@ -496,7 +496,6 @@ void LCD_initDisplay(uint8_t options)
 
 void ST7735_setAddrWindow(uint16_t x, uint16_t y, uint16_t w, uint16_t h)
 {
-
 	x += _xstart;
 	y += _ystart;
 
@@ -522,9 +521,7 @@ void LCD_WriteBitmap(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t *b
 	ST7735_Select();
 	ST7735_setAddrWindow(x, y, w, h); // Clipped area
 	ST7735_RegData();
-	// spi_set_format(st7735_spi, 16, SPI_CPOL_1, SPI_CPOL_1, SPI_MSB_FIRST);
-
-	// spi_write16_blocking(st7735_spi, bitmap, w * h);
+	
 	for (size_t i = 0; i < w * h; i++)
     {
         uint16_t byte = bitmap[i];
@@ -534,6 +531,7 @@ void LCD_WriteBitmap(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t *b
             spi_pulse_sck();
         }
     }
+	
 	ST7735_DeSelect();
 }
 
@@ -542,8 +540,6 @@ void LCD_WritePixel(int x, int y, uint16_t col)
 	ST7735_Select();
 	ST7735_setAddrWindow(x, y, 1, 1); // Clipped area
 	ST7735_RegData();
-	// spi_set_format(st7735_spi, 16, SPI_CPOL_1, SPI_CPOL_1, SPI_MSB_FIRST);
-	// spi_write16_blocking(st7735_spi, &col, 1);
 	
 	uint16_t byte = col;
 	for (int j = 15; j >= 0; j--)

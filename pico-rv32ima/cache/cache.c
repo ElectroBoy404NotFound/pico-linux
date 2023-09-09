@@ -9,7 +9,7 @@
 #include <string.h>
 
 #include "cache.h"
-#include "psram.h"
+#include "../psram/psram.h"
 
 #define psram_write(handle, ofs, p, sz) accessPSRAM(ofs, sz, true, p)
 #define psram_read(handle, ofs, p, sz) accessPSRAM(ofs, sz, false, p)
