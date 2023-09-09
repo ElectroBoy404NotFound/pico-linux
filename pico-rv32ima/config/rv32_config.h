@@ -12,7 +12,7 @@
 #define IMAGE_FILENAME "0:Image"
 
 // Time divisor
-#define EMULATOR_TIME_DIV 1
+#define EMULATOR_TIME_DIV 2
 
 // Tie microsecond clock to instruction count
 #define EMULATOR_FIXED_UPDATE false
@@ -49,12 +49,14 @@
 /******************/
 
 // Use hardware SPI for PSRSAM (bitbang otherwise)
-#define PSRAM_HARDWARE_SPI 1
+#define PSRAM_HARDWARE_SPI 0
 
 #if PSRAM_HARDWARE_SPI
 
 // Hardware SPI instance to use for PSRAM
 #define PSRAM_SPI_INST spi1
+// PSRAM SPI speed (in MHz)
+#define PSRAM_SPI_SPEED 50
 
 #endif
 // Pins for the PSRAM SPI interface
@@ -77,9 +79,6 @@
 #define PSRAM_THREE_CHIPS 0
 // Use four PSRAM chips?
 #define PSRAM_FOUR_CHIPS  0
-
-// PSRAM SPI speed (in MHz)
-#define PSRAM_SPI_SPEED 40
 
 /****************/
 /* SD card config

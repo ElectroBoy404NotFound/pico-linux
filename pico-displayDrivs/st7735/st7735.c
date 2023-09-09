@@ -160,9 +160,9 @@ const uint8_t Bcmd[] = {			  // Init commands for 7735B screens
 		ST77XX_DISPON, ST_CMD_DELAY,												//  4: Main screen turn on, no args w/delay
 		100};																		//    10 ms delay
 
-#define spi_set_mosi(value) gpio_put(st7735_pinTX, value)
+#define lcd_spi_set_mosi(value) gpio_put(st7735_pinTX, value)
 
-#define spi_pulse_sck()                \
+#define lcd_spi_pulse_sck()                \
     {                                  \
         asm("nop");                    \
         gpio_put(st7735_pinSCK, 1); \
@@ -170,15 +170,15 @@ const uint8_t Bcmd[] = {			  // Init commands for 7735B screens
         gpio_put(st7735_pinSCK, 0); \
     }
 
-void spi_tx_array(const uint8_t *data, size_t size)
+void lcd_spi_tx_array(const uint8_t *data, size_t size)
 {
     for (size_t i = 0; i < size; i++)
     {
         uint8_t byte = data[i];
         for (int j = 7; j >= 0; j--)
         {
-            spi_set_mosi((byte >> j) & 0x01);
-            spi_pulse_sck();
+            lcd_spi_set_mosi((byte >> j) & 0x01);
+            lcd_spi_pulse_sck();
         }
     }
 }
@@ -254,7 +254,7 @@ void ST7735_RegData()
 void ST7735_WriteCommand(uint8_t cmd)
 {
 	ST7735_RegCommand();
-	spi_tx_array(&cmd, sizeof(cmd));
+	lcd_spi_tx_array(&cmd, sizeof(cmd));
 }
 
 void ST7735_WriteData(uint8_t *buff, size_t buff_size)
@@ -262,7 +262,7 @@ void ST7735_WriteData(uint8_t *buff, size_t buff_size)
 	ST7735_RegData();
 	// spi_set_format(st7735_spi, 8, SPI_CPOL_1, SPI_CPOL_1, SPI_MSB_FIRST);
 	// spi_write_blocking(st7735_spi, buff, buff_size);
-	spi_tx_array(buff, buff_size);
+	lcd_spi_tx_array(buff, buff_size);
 }
 
 void ST7735_SendCommand(uint8_t commandByte, uint8_t *dataBytes,
@@ -527,8 +527,8 @@ void LCD_WriteBitmap(uint16_t x, uint16_t y, uint16_t w, uint16_t h, uint16_t *b
         uint16_t byte = bitmap[i];
         for (int j = 15; j >= 0; j--)
         {
-            spi_set_mosi((byte >> j) & 0x01);
-            spi_pulse_sck();
+            lcd_spi_set_mosi((byte >> j) & 0x01);
+            lcd_spi_pulse_sck();
         }
     }
 	
@@ -544,8 +544,8 @@ void LCD_WritePixel(int x, int y, uint16_t col)
 	uint16_t byte = col;
 	for (int j = 15; j >= 0; j--)
 	{
-		spi_set_mosi((byte >> j) & 0x01);
-		spi_pulse_sck();
+		lcd_spi_set_mosi((byte >> j) & 0x01);
+		lcd_spi_pulse_sck();
 	}
 	ST7735_DeSelect();
 }
