@@ -14,12 +14,12 @@ int16_t _ystart = 0; ///< Internal framebuffer Y offset
 
 uint8_t rotation;
 
-uint16_t st7735_pinCS = PICO_DEFAULT_SPI_CSN_PIN;
-uint16_t st7735_pinDC = 20;
-int16_t st7735_pinRST = 16;
+uint16_t st7735_pinCS;
+uint16_t st7735_pinDC;
+int16_t st7735_pinRST;
 
-uint16_t st7735_pinSCK = PICO_DEFAULT_SPI_SCK_PIN;
-uint16_t st7735_pinTX = PICO_DEFAULT_SPI_TX_PIN;
+uint16_t st7735_pinSCK;
+uint16_t st7735_pinTX;
 
 const uint8_t Bcmd[] = {			  // Init commands for 7735B screens
 	18,								  // 18 commands in list:
@@ -402,7 +402,7 @@ void LCD_setRotation(uint8_t m)
 		_ystart = _rowstart;
 		break;
 	case 3:
-		if ((tabcolor == INITR_BLACKTAB) || (tabcolor == INITR_MINI160x80))
+		if ((tabcolor == INITR_BLACKTAB) || (tabcolor == INITR_MINI160x80) || (tabcolor == INITR_GREENTAB))
 		{
 			madctl = ST77XX_MADCTL_MX | ST77XX_MADCTL_MV | ST77XX_MADCTL_RGB;
 		}

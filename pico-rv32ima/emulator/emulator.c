@@ -18,14 +18,6 @@
 
 #include "../config/rv32_config.h"
 
-int time_divisor = EMULATOR_TIME_DIV;
-int fixed_update = EMULATOR_FIXED_UPDATE;
-int do_sleep = 1;
-int single_step = 0;
-int fail_on_all_faults = 0;
-
-uint32_t ram_amt = EMULATOR_RAM_MB * 1024 * 1024;
-
 static uint32_t HandleException(uint32_t ir, uint32_t retval);
 static uint32_t HandleControlStore(uint32_t addy, uint32_t val);
 static uint32_t HandleControlLoad(uint32_t addy);
@@ -42,21 +34,24 @@ void loadDataIntoRAM(const unsigned char *d, uint32_t addr, uint32_t size);
 
 #define MINIRV32WARN(x...) console_printf(x);
 #define MINIRV32_DECORATE static
-#define MINI_RV32_RAM_SIZE ram_amt
+#define MINI_RV32_RAM_SIZE (EMULATOR_RAM_MB * 1024 * 1024)
 #define MINIRV32_IMPLEMENTATION
+#if EMULAOTR_FAF
 #define MINIRV32_POSTEXEC(pc, ir, retval)             \
     {                                                 \
         if (retval > 0)                               \
         {                                             \
-            if (fail_on_all_faults)                   \
-            {                                         \
-                console_printf("FAULT\n");                \
-                return 3;                             \
-            }                                         \
-            else                                      \
-                retval = HandleException(ir, retval); \
+            console_printf("FAULT\n");                \
+            return 3;                                 \
         }                                             \
     }
+#else 
+#define MINIRV32_POSTEXEC(pc, ir, retval)             \
+    {                                                 \
+        if (retval > 0)                               \
+            retval = HandleException(ir, retval);     \
+    }
+#endif
 #define MINIRV32_HANDLE_MEM_STORE_CONTROL(addy, val) \
     if (HandleControlStore(addy, val))               \
         return val;
@@ -119,28 +114,21 @@ static void DumpState(struct MiniRV32IMAState *core)
 	cache_get_stat(&thit, &taccessed);
     RAMGetStat(&reads, &writes);
 
-	console_printf("Cache: hit: %llu, accessed: %llu\n\r", thit, taccessed);
-    console_printf("RAM: read: %llu, write: %llu\n\r", reads, writes);
-	console_printf("PC: %08x\r\n", pc);
-	// console_printf("Z:%08x ra:%08x sp:%08x gp:%08x tp:%08x t0:%08x t1:%08x t2:%08x s0:%08x s1:%08x a0:%08x a1:%08x a2:%08x a3:%08x a4:%08x a5:%08x\n\r",
-	// 	regs[0], regs[1], regs[2], regs[3], regs[4], regs[5], regs[6], regs[7],
-	// 	regs[8], regs[9], regs[10], regs[11], regs[12], regs[13], regs[14], regs[15] );
-	// console_printf("a6:%08x a7:%08x s2:%08x s3:%08x s4:%08x s5:%08x s6:%08x s7:%08x s8:%08x s9:%08x s10:%08x s11:%08x t3:%08x t4:%08x t5:%08x t6:%08x\n\r",
-	// 	regs[16], regs[17], regs[18], regs[19], regs[20], regs[21], regs[22], regs[23],
-	// 	regs[24], regs[25], regs[26], regs[27], regs[28], regs[29], regs[30], regs[31] );
+	console_printf("\x1b[32mCache: hit: %llu, accessed: %llu\n\r", thit, taccessed);
+    console_printf("\x1b[32mRAM: read: %llu, write: %llu\n\r", reads, writes);
+	console_printf("\x1b[32mPC: %08x\r\n", pc);
 }
 struct MiniRV32IMAState core;
 
 int rvEmulator()
 {
-
-    uint32_t dtb_ptr = ram_amt - sizeof(default64mbdtb);
+    uint32_t dtb_ptr = MINI_RV32_RAM_SIZE - sizeof(default64mbdtb);
     const uint32_t *dtb = default64mbdtb;
 
     FRESULT fr = loadFileIntoRAM(IMAGE_FILENAME, 0);
     if (FR_OK != fr)
-        console_panic("Error loading image: %s (%d)\n", FRESULT_str(fr), fr);
-    console_printf("\rImage loaded sucessfuly!\n\n\r");
+        console_panic("\r\x1b[31mError loading image: %s (%d)\n", FRESULT_str(fr), fr);
+    console_printf("\r\x1b[32mImage loaded sucessfuly!\x1b[m\n\n\r");
 
     uint32_t validram = dtb_ptr;
     loadDataIntoRAM(default64mbdtb, dtb_ptr, sizeof(default64mbdtb));
@@ -153,50 +141,49 @@ int rvEmulator()
     core.extraflags |= 3;                                                // Machine-mode.
 
     core.pc = MINIRV32_RAM_IMAGE_OFFSET;
-    long long instct = -1;
-
+ 
     // resetStatsRAM();
 
-    uint64_t rt;
-    uint64_t lastTime = (fixed_update) ? 0 : (GetTimeMicroseconds() / time_divisor);
-    int instrs_per_flip = single_step ? 1 : 1024;
-    for (rt = 0; rt < instct + 1 || instct < 0; rt += instrs_per_flip)
-    {
-        if(gpio_get(2) != 1) { DumpState(&core); break; }
+    #if !EMULATOR_FIXED_UPDATE
+        uint64_t lastTime = GetTimeMicroseconds() / EMULATOR_TIME_DIV;
+    #endif
+
+    while(true) {
+        if(gpio_get(2) != 1) { console_printf("\x1b[33mH/W Trig Stop!"); DumpState(&core); break; }
         uint64_t *this_ccount = ((uint64_t *)&core.cyclel);
         uint32_t elapsedUs = 0;
-        if (fixed_update)
-            elapsedUs = *this_ccount / time_divisor - lastTime;
-        else
-            elapsedUs = GetTimeMicroseconds() / time_divisor - lastTime;
-        lastTime += elapsedUs;
+        #if EMULATOR_FIXED_UPDATE
+            elapsedUs = *this_ccount / EMULATOR_TIME_DIV;
+        #else
+            elapsedUs = GetTimeMicroseconds() / EMULATOR_TIME_DIV - lastTime;
+            lastTime += elapsedUs;
+        #endif
 
-        int ret = MiniRV32IMAStep(&core, NULL, 0, elapsedUs, instrs_per_flip); // Execute upto 1024 cycles before breaking out.
+        int ret = MiniRV32IMAStep(&core, NULL, 0, elapsedUs, EMUALTOR_INSTR_FLIP); // Execute upto 1024 cycles before breaking out.
         switch (ret)
         {
         case 0:
             break;
         case 1:
-            if (do_sleep)
-                MiniSleep();
-            *this_ccount += instrs_per_flip;
+            MiniSleep();
+            *this_ccount += EMUALTOR_INSTR_FLIP;
             break;
         case 3:
-            instct = 0;
+            console_panic("\n\x1b[32mEmulator exit with error code 3!");
             break;
         case 0x7777:
-            console_printf("\nREBOOT@0x%08x%08x\n", core.cycleh, core.cyclel);
+            console_printf("\n\x1b[32mREBOOT@0x%08x%08x\n", core.cycleh, core.cyclel);
             return EMU_REBOOT; // syscon code for reboot
         case 0x5555:
-            console_printf("\nPOWEROFF@0x%08x%08x\n", core.cycleh, core.cyclel);
+            console_printf("\n\x1b[32mPOWEROFF@0x%08x%08x\n", core.cycleh, core.cyclel);
             return EMU_POWEROFF; // syscon code for power-off
         default:
-            console_printf("\nUnknown failure\n");
+            console_printf("\\x1b[31mUnknown failure\n");
             return EMU_UNKNOWN;
             break;
         }
     }
-    console_printf("\nPOWEROFF@0x%08x%08x\n", core.cycleh, core.cyclel);
+    console_printf("\nH/W POWEROFF@0x%08x%08x\n", core.cycleh, core.cyclel);
     return EMU_POWEROFF;
 }
 
@@ -237,9 +224,6 @@ static uint32_t HandleException(uint32_t ir, uint32_t code)
 
 static inline void HandleOtherCSRWrite(uint8_t *image, uint16_t csrno, uint32_t value)
 {
-    // if (csrno == 0x139)
-    //     console_putc(value);
-
     if( csrno == 0x136 )
 	{
 		console_printf( "%d", value );
@@ -253,22 +237,18 @@ static inline void HandleOtherCSRWrite(uint8_t *image, uint16_t csrno, uint32_t 
 		//Print "string"
 		uint32_t ptrstart = value - MINIRV32_RAM_IMAGE_OFFSET;
 		uint32_t ptrend = ptrstart;
-		if( ptrstart >= ram_amt )
-			console_printf( "DEBUG PASSED INVALID PTR (%08x)\n", value );
-		while( ptrend < ram_amt )
+		if( ptrstart >= MINI_RV32_RAM_SIZE )
+			console_printf( "\r\n\x1b[31mDEBUG PASSED INVALID PTR (%08x)\r\n", value );
+		while( ptrend < MINI_RV32_RAM_SIZE )
 		{
 			if( MINIRV32_LOAD1(ptrend) == 0 ) break;
             console_putc(MINIRV32_LOAD1(ptrend));
 			ptrend++;
 		}
-		// if( ptrend != ptrstart )
-		//  	fwrite( image + ptrstart, ptrend - ptrstart, 1, stdout );
 	}
     else if (csrno == 0x139)
     {
-        char c = value;
-        // queue_add_blocking(&ser_screen_queue, &c);
-        console_putc(c);
+        console_putc((char)value);
     }
 }
 
@@ -315,7 +295,9 @@ static inline uint64_t GetTimeMicroseconds()
 
 static void MiniSleep()
 {
-    sleep_ms(1);
+    #if EMULATOR_WFI_SLEEP
+        sleep_ms(1);
+    #endif
 }
 
 // Memory and file loading
@@ -355,5 +337,5 @@ FRESULT loadFileIntoRAM(const char *imageFilename, uint32_t addr)
 void loadDataIntoRAM(const unsigned char *d, uint32_t addr, uint32_t size)
 {
     while (size--) 
-        accessPSRAM(addr++, 1, true, d++);
+        accessPSRAM(addr++, 1, true, (void*) d++);
 }

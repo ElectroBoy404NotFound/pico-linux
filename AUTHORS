@@ -1,10 +1,10 @@
 File/folder                    Authors
 
 no-OS-FatFS-SD-SPI-RPi-Pico -> tvlad1234, carlk3
-pico-displayDrivs           -> tvlad1234
+pico-displayDrivs           -> tvlad1234, ElectroBoy404NotFound
 pico-ps2Driv                -> tvlad1234
 
-pico-rv32ima/cache          -> xhackerustc
+pico-rv32ima/cache          -> xhackerustc, tvlad1234, ElectroBoy404NotFound
 pico-rv32ima/psram          -> tvlad1234, ElectroBoy404NotFound
 pico-rv32ima/emulator       -> cnlohr, tvlad1234, ElectroBoy404NotFound
 pico-rv32ima/config         -> tvlad1234, ElectroBoy404NotFound

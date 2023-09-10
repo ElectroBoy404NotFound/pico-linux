@@ -33,8 +33,7 @@ uint16_t termBgColor = ST77XX_BLACK;
 void initLCDTerm(void)
 {
     LCD_setPins(LCD_PIN_DC, LCD_PIN_CS, LCD_PIN_RST, LCD_PIN_SCK, LCD_PIN_TX);
-    // LCD_setSPIperiph(LCD_SPI_INSTANCE);
-    LCD_initDisplay(INITR_GREENTAB);
+    LCD_initDisplay(LCD_INITR);
     LCD_setRotation(1);
     GFX_createFramebuf();
 
@@ -123,7 +122,7 @@ char termPeekChar()
     return c;
 }
 
-const uint16_t termColors[] = {ST77XX_BLACK, ST77XX_BLUE, ST77XX_GREEN, ST77XX_YELLOW, ST77XX_RED, ST77XX_MAGENTA, ST77XX_CYAN, ST77XX_WHITE};
+const uint16_t termColors[] = {ST77XX_BLACK, ST77XX_RED, ST77XX_GREEN, ST77XX_YELLOW, ST77XX_BLUE, ST77XX_MAGENTA, ST77XX_CYAN, ST77XX_WHITE};
 
 void runCSI(char csi, uint *param, uint paramCount)
 {

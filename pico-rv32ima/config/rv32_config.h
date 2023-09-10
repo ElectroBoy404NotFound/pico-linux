@@ -17,13 +17,22 @@
 // Tie microsecond clock to instruction count
 #define EMULATOR_FIXED_UPDATE false
 
+// Sleep while WFI
+#define EMULATOR_WFI_SLEEP false
+
+// Number of instructions per flip
+#define EMUALTOR_INSTR_FLIP 1024
+
+// Should Emulator fail on all faults?
+#define EMULAOTR_FAF false
+
 // Enable UART console
 #define CONSOLE_UART 1
 
 // Enable USB CDC console
 #define CONSOLE_CDC 0
 
-// Enable ST7735 LCD and PS/2 keyboard terminal (Cannot be used when PSRAM is using hardware SPI)
+// Enable ST7735 LCD and PS/2 keyboard terminal
 #define CONSOLE_LCD 1
 
 #if CONSOLE_UART
@@ -125,9 +134,8 @@
 /* LCD SPI interface
 /******************/
 
-// SPI instance used for the LCD (if used)
-#define LCD_SPI_INSTANCE spi1
-
+// LCD INITR code
+#define LCD_INITR INITR_GREENTAB
 // Pins for the LCD SPI interface (if used)
 #define LCD_PIN_DC 4
 #define LCD_PIN_CS 6
@@ -144,13 +152,17 @@
 
 #endif
 
+/*******************/
+/* Config Checks
+/* DO NOT MODIFY!
+/******************/
 #if PSRAM_FOUR_CHIPS
     #undef PSRAM_THREE_CHIPS
     #undef PSRAM_TWO_CHIPS
 
     #define PSRAM_THREE_CHIPS 0
     #define PSRAM_TWO_CHIPS 0
-#else PSRAM_THREE_CHIPS
+#else
     #if PSRAM_THREE_CHIPS
         #undef PSRAM_FOUR_CHIPS
         #undef PSRAM_TWO_CHIPS

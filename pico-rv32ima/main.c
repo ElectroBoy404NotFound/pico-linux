@@ -90,15 +90,15 @@ void core1_entry()
 {
     int r = initPSRAM();
     if (r < 1)
-        console_panic("Error initalizing PSRAM!\n\r");
+        console_panic("\x1b[31mError initalizing PSRAM!\n\r");
 
-    console_printf("PSRAM init OK!\n\r");
-    console_printf("PSRAM Baud: %d\n\r", r);
+    console_printf("\x1b[32mPSRAM init OK!\n\r");
+    console_printf("\x1b[32mPSRAM Baud: %d\n\r", r);
 
     sd_card_t *pSD0 = sd_get_by_num(0);
     FRESULT fr = f_mount(&pSD0->fatfs, pSD0->pcName, 1);
     if (FR_OK != fr)
-        console_panic("SD mount error: %s (%d)\n\r", FRESULT_str(fr), fr);
+        console_panic("\x1b[31mSD mount error: %s (%d)\n\r", FRESULT_str(fr), fr);
 
     gpio_init(2);
 	gpio_set_dir(2, GPIO_IN);

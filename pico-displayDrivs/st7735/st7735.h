@@ -1,15 +1,6 @@
 #ifndef ST7735_H
 #define ST7735_H
 #include "pico/stdlib.h"
-#include "hardware/spi.h"
-
-// Pins
-#define ST7735_CS PICO_DEFAULT_SPI_CSN_PIN
-#define ST7735_RST 16
-#define ST7735_DC 20
-
-// Use DMA?
-//#define USE_DMA 1
 
 #define ST7735_TFTWIDTH_128 128  // for 1.44 and mini
 #define ST7735_TFTWIDTH_80 80    // for mini
@@ -99,7 +90,6 @@
 #define ST77XX_ORANGE 0xFC00
 
 void LCD_setPins(uint16_t dc, uint16_t cs, int16_t rst, uint16_t sck, uint16_t tx);
-void LCD_setSPIperiph(spi_inst_t *s);
 void LCD_initDisplay(uint8_t options);
 
 void LCD_setRotation(uint8_t m);

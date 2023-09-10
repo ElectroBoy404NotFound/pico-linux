@@ -52,7 +52,6 @@ If you want to build the image yourself, you need to run `make` in the [linux](l
 ### Software
 The system console is accessible over USB-CDC, UART or an 128x160 ST7735 display paired with a PS2 keyboard. All three can be used at the same time, but keep in mind they point to the same virtual console. They can be enabled or disabled as desired in the config file. By default, the UART console and LCD console is enabled.
 
-
 ## How It Works
 
 This project uses [CNLohr's mini-rv32ima](https://github.com/cnlohr/mini-rv32ima) RISC-V emulator core to run Linux on a Raspberry Pi Pico.\
@@ -67,6 +66,7 @@ The boot process is described below:
 - After around a minute and half, it will boot into the console
 
 It uses the RISC-V emulator core to run the compiled Linux kernel on a Raspberry Pi Pico.
+
 ## Demo
 
 ### Video
