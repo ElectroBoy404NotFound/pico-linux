@@ -5,7 +5,7 @@
 ![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)
 ![BSD-3 License](https://img.shields.io/badge/license-BSD--3-green.svg)
 
-RISC-V emulator for RP2040, capable of running Linux.\
+RISC-V emulator for RP2040, capable of running Linux.
 
 Based on [pico-rv32ima by tvlad1234](https://github.com/tvlad1234/pico-rv32ima).
 Based on [mini-rv32ima by CNLohr](https://github.com/cnlohr/mini-rv32ima).

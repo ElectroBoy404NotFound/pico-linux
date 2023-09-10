@@ -122,7 +122,7 @@ char termPeekChar()
     return c;
 }
 
-const uint16_t termColors[] = {ST77XX_BLACK, ST77XX_RED, ST77XX_GREEN, ST77XX_YELLOW, ST77XX_BLUE, ST77XX_MAGENTA, ST77XX_CYAN, ST77XX_WHITE};
+const uint16_t termColors[] = {ST77XX_BLACK, ST77XX_BLUE, ST77XX_GREEN, ST77XX_CYAN, ST77XX_RED, ST77XX_MAGENTA, ST77XX_YELLOW, ST77XX_WHITE};
 
 void runCSI(char csi, uint *param, uint paramCount)
 {
