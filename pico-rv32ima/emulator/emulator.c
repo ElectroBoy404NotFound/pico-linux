@@ -133,23 +133,27 @@ int rvEmulator()
     uint32_t validram = dtb_ptr;
     loadDataIntoRAM(default64mbdtb, dtb_ptr, sizeof(default64mbdtb));
 
+    // Tell linux on how much ram we have
     uint32_t dtbRamValue = (validram >> 24) | (((validram >> 16) & 0xff) << 8) | (((validram >> 8) & 0xff) << 16) | ((validram & 0xff) << 24);
     MINIRV32_STORE4(dtb_ptr + 0x13c, dtbRamValue);
 
+    // Setup the Emulator Core
     core.regs[10] = 0x00;                                                // hart ID
     core.regs[11] = dtb_ptr ? (dtb_ptr + MINIRV32_RAM_IMAGE_OFFSET) : 0; // dtb_pa (Must be valid pointer) (Should be pointer to dtb)
     core.extraflags |= 3;                                                // Machine-mode.
 
     core.pc = MINIRV32_RAM_IMAGE_OFFSET;
- 
-    // resetStatsRAM();
 
+    // Start the Emulator
     #if !EMULATOR_FIXED_UPDATE
         uint64_t lastTime = GetTimeMicroseconds() / EMULATOR_TIME_DIV;
     #endif
 
     while(true) {
+        // Check if the H/W trigger is pulled
         if(gpio_get(2) != 1) { console_printf("\x1b[33mH/W Trig Stop!"); DumpState(&core); break; }
+        
+        // If not, continue the emulator
         uint64_t *this_ccount = ((uint64_t *)&core.cyclel);
         uint32_t elapsedUs = 0;
         #if EMULATOR_FIXED_UPDATE
@@ -163,26 +167,33 @@ int rvEmulator()
         switch (ret)
         {
         case 0:
+            // Return code 0 means All Good
             break;
         case 1:
+            // Return code 1 means WFI (Wait For Intrrupt)
             MiniSleep();
             *this_ccount += EMUALTOR_INSTR_FLIP;
             break;
         case 3:
+            // Return code 3 means illegal opcode
             console_panic("\n\x1b[32mEmulator exit with error code 3!");
             break;
         case 0x7777:
+            // 0x7777 is the syscon for REBOOT
             console_printf("\n\x1b[32mREBOOT@0x%08x%08x\n", core.cycleh, core.cyclel);
             return EMU_REBOOT; // syscon code for reboot
         case 0x5555:
+            // 0x5555 is the syscon for POWEROFF
             console_printf("\n\x1b[32mPOWEROFF@0x%08x%08x\n", core.cycleh, core.cyclel);
             return EMU_POWEROFF; // syscon code for power-off
         default:
-            console_printf("\\x1b[31mUnknown failure\n");
+            console_printf("\\x1b[31mUnknown failure (%d)!\n", ret);
             return EMU_UNKNOWN;
             break;
         }
     }
+    
+    // Hardware POWEROFF
     console_printf("\nH/W POWEROFF@0x%08x%08x\n", core.cycleh, core.cyclel);
     return EMU_POWEROFF;
 }

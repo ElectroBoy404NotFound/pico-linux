@@ -168,8 +168,3 @@ void cache_get_stat(uint64_t *phit, uint64_t *paccessed)
 	*phit = hit;
 	*paccessed = accessed;
 }
-
-void resetCacheSt() {
-	hit = 0;
-	accessed = 0;
-}

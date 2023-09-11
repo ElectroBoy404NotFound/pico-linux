@@ -252,9 +252,3 @@ void RAMGetStat(uint64_t* preads, uint64_t* pwrites) {
     *(preads) = reads;
     *(pwrites) = writes;
 }
-
-void resetStatsRAM() {
-    reads = 0;
-    writes = 0;
-    resetCacheSt();
-}

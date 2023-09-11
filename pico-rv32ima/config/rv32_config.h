@@ -172,14 +172,17 @@
     #endif
 #endif
 
-#if PSRAM_TWO_CHIPS && PSRAM_CHIP_SIZE * 2 < EMULATOR_RAM_MB
-    #error "RAM Size too Big!"
+#if !PSRAM_TWO_CHIPS && !PSRAM_THREE_CHIPS && !PSRAM_FOUR_CHIPS && PSRAM_CHIP_SIZE < (EMULATOR_RAM_MB * 1024 * 1024)
+    #error "RAM Size too Big! 8MB < RAM"
 #endif
-#if PSRAM_THREE_CHIPS && PSRAM_CHIP_SIZE * 3 < EMULATOR_RAM_MB
-    #error "RAM Size too Big!"
+#if PSRAM_TWO_CHIPS && PSRAM_CHIP_SIZE * 2 < (EMULATOR_RAM_MB * 1024 * 1024)
+    #error "RAM Size too Big! 16MB < RAM"
 #endif
-#if PSRAM_FOUR_CHIPS && PSRAM_CHIP_SIZE * 4 < EMULATOR_RAM_MB
-    #error "RAM Size too Big!"
+#if PSRAM_THREE_CHIPS && PSRAM_CHIP_SIZE * 3 < (EMULATOR_RAM_MB * 1024 * 1024)
+    #error "RAM Size too Big! 24MB < RAM"
+#endif
+#if PSRAM_FOUR_CHIPS && PSRAM_CHIP_SIZE * 4 < (EMULATOR_RAM_MB * 1024 * 1024)
+    #error "RAM Size too Big! 32MB < RAM"
 #endif
 
 #endif
