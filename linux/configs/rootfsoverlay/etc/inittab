@@ -29,11 +29,9 @@ null::sysinit:/bin/ln -sf /proc/self/fd/2 /dev/stderr
 ::sysinit:/etc/init.d/rcS
 
 # Put a getty on the serial port
-console::sysinit:stty rows 15 cols 24
-console::sysinit:clear
-console::sysinit:echo "Welcome to pico-rv32ima Linux"
+console::sysinit:echo "Welcome to RPi Pico Linux!"
 console::respawn:/bin/login -f root
-#console::respawn:/bin/getty -L -n -L console 0 vt100 # GENERIC_SERIAL
+#ttyS0::respawn:/sbin/getty -L ttyS0 115200 vt100 # GENERIC_SERIAL
 
 # Stuff to do for the 3-finger salute
 #::ctrlaltdel:/sbin/reboot
