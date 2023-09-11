@@ -9,3 +9,6 @@ linux/buildroot
 
 #ignore c4 source folder
 linux/c4/c4src
+
+# Incase i forget to remove
+linux/output
