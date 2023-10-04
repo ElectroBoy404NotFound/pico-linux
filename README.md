@@ -1,8 +1,7 @@
 # Pico Linux
 
 ![MIT License](https://img.shields.io/badge/License-MIT-green.svg)
-![GPLv3 License](https://img.shields.io/badge/License-GPL%20v3-yellow.svg)
-![AGPL License](https://img.shields.io/badge/license-AGPL-blue.svg)
+![Apache License](https://img.shields.io/badge/license-Apache-blue.svg)
 ![BSD-3 License](https://img.shields.io/badge/license-BSD--3-green.svg)
 
 RISC-V emulator for RP2040, capable of running Linux.
