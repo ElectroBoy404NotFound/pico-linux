@@ -9,6 +9,8 @@ add_executable(pico-rv32ima
 	console/usb_descriptors.c
     console/console.c
 	console/terminal.c
+
+	rtc/rtc.c
 	
 	config/sd_hw_config.c
 )
@@ -21,6 +23,7 @@ target_link_libraries(pico-rv32ima
 	pico_multicore
 	hardware_vreg
 	hardware_spi
+	hardware_i2c
 	hardware_clocks
 	tinyusb_device 
 	tinyusb_board

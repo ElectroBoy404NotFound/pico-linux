@@ -6,7 +6,7 @@
 /******************/
 
 // RAM size in megabytes
-#define EMULATOR_RAM_MB 16
+#define EMULATOR_RAM_MB 32
 
 // Image filename
 #define IMAGE_FILENAME "0:Image"
@@ -33,7 +33,7 @@
 #define CONSOLE_CDC 0
 
 // Enable ST7735 LCD and PS/2 keyboard terminal
-#define CONSOLE_LCD 1
+#define CONSOLE_LCD 0
 
 #if CONSOLE_UART
 
@@ -76,18 +76,18 @@
 // Select lines for the two PSRAM chips
 #define PSRAM_SPI_PIN_S1 21
 #define PSRAM_SPI_PIN_S2 22
-#define PSRAM_SPI_PIN_S3 26
-#define PSRAM_SPI_PIN_S4 27
+#define PSRAM_SPI_PIN_S3 14
+#define PSRAM_SPI_PIN_S4 15
 
 // PSRAM chip size (in kilobytes)
 #define PSRAM_CHIP_SIZE (8192 * 1024)
 
 // Use two PSRAM chips?
-#define PSRAM_TWO_CHIPS   1
+#define PSRAM_TWO_CHIPS   0
 // Use three PSRAM chips?
 #define PSRAM_THREE_CHIPS 0
 // Use four PSRAM chips?
-#define PSRAM_FOUR_CHIPS  0
+#define PSRAM_FOUR_CHIPS  1
 
 /****************/
 /* SD card config
@@ -159,16 +159,20 @@
 #if PSRAM_FOUR_CHIPS
     #undef PSRAM_THREE_CHIPS
     #undef PSRAM_TWO_CHIPS
+    #undef CONSOLE_LCD
 
     #define PSRAM_THREE_CHIPS 0
     #define PSRAM_TWO_CHIPS 0
+    #define CONSOLE_LCD 0
 #else
     #if PSRAM_THREE_CHIPS
         #undef PSRAM_FOUR_CHIPS
         #undef PSRAM_TWO_CHIPS
+        #undef CONSOLE_LCD
 
         #define PSRAM_FOUR_CHIPS 0
         #define PSRAM_TWO_CHIPS 0
+        #define CONSOLE_LCD 0
     #endif
 #endif
 

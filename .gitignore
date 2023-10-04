@@ -12,3 +12,6 @@ linux/c4/c4src
 
 # Incase i forget to remove
 linux/output
+
+# Don't add build
+build_debug/

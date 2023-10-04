@@ -131,7 +131,7 @@ void console_panic(const char *format, ...)
     va_list args;
     va_start(args, format);
     vsprintf(termPrintBuf, format, args);
-    console_puts("PANIC: ");
+    console_puts("\x1b[31mPANIC: ");
     console_puts(termPrintBuf);
     va_end(args);
 
