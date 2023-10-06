@@ -152,6 +152,12 @@
 
 #endif
 
+// RTC
+#define DS3231_I2C_PORT i2c1
+#define DS3231_I2C_SDA  26
+#define DS3231_I2C_SCL  27
+#define DS3231_I2C_ADDR 0x68
+
 /*******************/
 /* Config Checks
 /* DO NOT MODIFY!
