@@ -68,7 +68,7 @@ It uses the RISC-V emulator core to run the compiled Linux kernel on a Raspberry
 ## Demo
 
 ### Video
-- A video of the boot process can be seen [here](https://youtu.be/txgoWddk_2I)
+- A video of the boot process can be seen [here]()
 
 ### Pictures
 - Serial (USB or UART) console:
