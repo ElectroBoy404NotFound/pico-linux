@@ -9,8 +9,6 @@ add_executable(pico-rv32ima
 	console/usb_descriptors.c
     console/console.c
 	console/terminal.c
-
-	rtc/rtc.c
 	
 	config/sd_hw_config.c
 )

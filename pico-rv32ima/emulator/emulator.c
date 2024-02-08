@@ -94,9 +94,22 @@ static uint16_t MINIRV32_LOAD2(uint32_t ofs)
     return val;
 }
 
+static int16_t MINIRV32_LOAD2_SIGNED(uint32_t ofs)
+{
+    int16_t val;
+    cache_read(ofs, &val, 2);
+    return val;
+}
+
 static uint8_t MINIRV32_LOAD1(uint32_t ofs)
 {
     uint8_t val;
+    cache_read(ofs, &val, 1);
+    return val;
+}
+static int8_t MINIRV32_LOAD1_SIGNED(uint32_t ofs)
+{
+    int8_t val;
     cache_read(ofs, &val, 1);
     return val;
 }
@@ -127,7 +140,7 @@ int rvEmulator()
 
     FRESULT fr = loadFileIntoRAM(IMAGE_FILENAME, 0);
     if (FR_OK != fr)
-        console_panic("\r\x1b[31mError loading image: %s (%d)\n", FRESULT_str(fr), fr);
+        console_panic("\r\x1b[31mError loading image: %s (%d)\r\n", FRESULT_str(fr), fr);
     console_printf("\r\x1b[32mImage loaded sucessfuly!\x1b[m\n\n\r");
 
     uint32_t validram = dtb_ptr;

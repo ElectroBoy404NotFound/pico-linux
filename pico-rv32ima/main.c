@@ -13,7 +13,6 @@
 #include "emulator/emulator.h"
 #include "console/console.h"
 #include "console/terminal.h"
-#include "rtc/rtc.h"
 
 void core1_entry();
 
@@ -105,12 +104,6 @@ void core1_entry()
 	gpio_set_dir(2, GPIO_IN);
 	gpio_pull_up(2);
     
-    RTCInit();
-
-    console_printf("Time: %lu\r\n", readTime());
-    setTime(readTime());
-    console_printf("Time: %lu\r\n", readTime());
-
     int c = rvEmulator();
 
     while (c == EMU_REBOOT)

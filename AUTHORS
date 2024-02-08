@@ -9,7 +9,6 @@ pico-rv32ima/psram          -> tvlad1234, ElectroBoy404NotFound
 pico-rv32ima/emulator       -> cnlohr, tvlad1234, ElectroBoy404NotFound
 pico-rv32ima/config         -> tvlad1234, ElectroBoy404NotFound
 pico-rv32ima/console        -> tvlad1234, ElectroBoy404NotFound
-pico-rv32ima/rtc            -> ElectroBoy404NotFound
 pico-rv32ima/main.c         -> tvlad1234, ElectroBoy404NotFound
 
 linux                       -> tvlad1234
