@@ -122,9 +122,10 @@ static void DumpState(struct MiniRV32IMAState *core)
 	unsigned int pc = core->pc;
 	unsigned int *regs = (unsigned int *)core->regs;
 	uint64_t thit, taccessed;
+    thit = taccessed = 0;
     uint64_t writes, reads;
 
-	cache_get_stat(&thit, &taccessed);
+	// cache_get_stat(&thit, &taccessed);
     RAMGetStat(&reads, &writes);
 
 	console_printf("\x1b[32mCache: hit: %llu, accessed: %llu\n\r", thit, taccessed);

@@ -65,7 +65,7 @@
 // Hardware SPI instance to use for PSRAM
 #define PSRAM_SPI_INST spi1
 // PSRAM SPI speed (in MHz)
-#define PSRAM_SPI_SPEED 50
+#define PSRAM_SPI_SPEED 45
 
 #endif
 // Pins for the PSRAM SPI interface
@@ -151,12 +151,6 @@
 #define PS2_PIN_CK 8
 
 #endif
-
-// RTC
-#define DS3231_I2C_PORT i2c1
-#define DS3231_I2C_SDA  26
-#define DS3231_I2C_SCL  27
-#define DS3231_I2C_ADDR 0x68
 
 /*******************/
 /* Config Checks
