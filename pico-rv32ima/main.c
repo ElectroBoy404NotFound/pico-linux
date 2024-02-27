@@ -72,7 +72,7 @@ int main()
     sleep_ms(50);
     vreg_set_voltage(VREG_VOLTAGE_MAX); // overvolt the core just a bit
     sleep_ms(50);
-    gset_sys_clock_khz(400000, true); // overclock to 400 MHz (from 125MHz)
+    gset_sys_clock_khz(438000, true); // overclock to 400 MHz (from 125MHz)
     sleep_ms(50);
     console_init();
 

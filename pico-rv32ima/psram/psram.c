@@ -188,7 +188,7 @@ int initPSRAM()
     reads = writes = 0;
 #if PSRAM_HARDWARE_SPI
     baud = spi_set_baudrate(PSRAM_SPI_INST, 1000 * 1000 * PSRAM_SPI_SPEED);
-    return baud;
+    return baud / 1000 / 1000;
 #else
     return 1;
 #endif

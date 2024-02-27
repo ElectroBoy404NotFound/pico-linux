@@ -58,14 +58,14 @@
 /******************/
 
 // Use hardware SPI for PSRSAM (bitbang otherwise)
-#define PSRAM_HARDWARE_SPI 0
+#define PSRAM_HARDWARE_SPI 1
 
 #if PSRAM_HARDWARE_SPI
 
 // Hardware SPI instance to use for PSRAM
 #define PSRAM_SPI_INST spi1
 // PSRAM SPI speed (in MHz)
-#define PSRAM_SPI_SPEED 45
+#define PSRAM_SPI_SPEED 52
 
 #endif
 // Pins for the PSRAM SPI interface
